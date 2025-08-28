@@ -2,10 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/day-01-users-module",
-    "paths": {
-      "@day-01-users-module/*": ["apps/day-01-users-module/src/*"]
-    }
+    "outDir": "../../dist/apps/day-02-auth-module",
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

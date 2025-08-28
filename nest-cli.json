@@ -18,6 +18,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/day-01-users-module/tsconfig.app.json"
       }
+    },
+    "day-02-auth-module": {
+      "type": "application",
+      "root": "apps/day-02-auth-module",
+      "entryFile": "main",
+      "sourceRoot": "apps/day-02-auth-module/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/day-02-auth-module/tsconfig.app.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
     }
   }
 }

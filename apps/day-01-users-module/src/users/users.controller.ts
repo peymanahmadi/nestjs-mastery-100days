@@ -15,8 +15,10 @@ import {
   ApiOperation,
   ApiRequestTimeoutResponse,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
@@ -24,7 +26,11 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'List of all users' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of all users',
+    type: [CreateUserDto],
+  })
   @Get()
   getAllUsers() {
     this.logger.log('Fetching all users');
@@ -32,12 +38,21 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get a user by Id' })
-  @ApiResponse({ status: 200, description: 'User found' })
+  @ApiResponse({ status: 200, description: 'User found', type: CreateUserDto })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Get(':id')
   getOneUser(@Param('id') id: string) {
     this.logger.log(`Fetching user with ID ${id}`);
     return this.usersService.findOne(id);
+  }
+
+  @ApiOperation({ summary: 'Get a user by email' })
+  @ApiResponse({ status: 200, description: 'User found', type: CreateUserDto })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @Get('email/:email')
+  findByEmail(@Param('email') email: string) {
+    this.logger.log(`Fetching user with email ${email}`);
+    return this.usersService.findByEmail(email);
   }
 
   @ApiOperation({ summary: 'Create a new user' })
@@ -46,6 +61,7 @@ export class UsersController {
     description: 'User created',
     type: CreateUserDto,
   })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     this.logger.log(`Creating user with email ${createUserDto.Email}`);

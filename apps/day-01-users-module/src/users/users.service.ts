@@ -3,6 +3,7 @@ import { UsersRepository } from './users.repository';
 import { User } from './interface/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
@@ -14,19 +15,17 @@ export class UsersService {
     return this.usersRepository.findAll();
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string): Promise<User | null> {
     return this.usersRepository.findOne(id);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const existingUser = await this.usersRepository.findOne(createUserDto.Id);
-    if (existingUser) {
-      this.logger.error(`User with Id ${createUserDto.Id} already exists.`);
-      throw new ConflictException(
-        `User with Id ${createUserDto.Id} already exists.`,
-      );
-    }
+  async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findByEmail(email);
+  }
 
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const userId = uuidv4();
+    
     const existingEmail = await this.usersRepository
       .findAll()
       .find((user) => user.Email === createUserDto.Email);
@@ -39,9 +38,9 @@ export class UsersService {
       );
     }
 
-    const user: User = { ...createUserDto };
-    this.logger.log(`Created user with ID ${user.Id}`);
-    return this.usersRepository.create(createUserDto);
+    const user: User = { Id: userId, ...createUserDto };
+    this.logger.log(`Created user with Id ${user.Id}`);
+    return this.usersRepository.create(user);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
