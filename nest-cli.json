@@ -28,6 +28,15 @@
         "tsConfigPath": "apps/day-02-auth-module/tsconfig.app.json"
       }
     },
+    "day-03-observability": {
+      "type": "application",
+      "root": "apps/day-03-observability",
+      "entryFile": "main",
+      "sourceRoot": "apps/day-03-observability/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/day-03-observability/tsconfig.app.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",

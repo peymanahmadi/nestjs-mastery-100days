@@ -19,7 +19,11 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  // async findByEmail(email: string): Promise<User | null> {
+  //   return this.usersRepository.findByEmail(email);
+  // }
+
+  async findByEmail(email: string): Promise<User | undefined> {
     return this.usersRepository.findByEmail(email);
   }
 

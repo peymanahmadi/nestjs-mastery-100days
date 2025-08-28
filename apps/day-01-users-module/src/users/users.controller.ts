@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,8 +18,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { LoggingInterceptor } from 'apps/day-03-observability/src/observability/logging.interceptor';
 
 @ApiTags('users')
+@UseInterceptors(LoggingInterceptor)
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
