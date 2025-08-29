@@ -3,17 +3,13 @@ import {
   Controller,
   Logger,
   Post,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '../../../day-01-users-module/src/users/interface/user.interface';
-import { LoggingInterceptor } from 'apps/day-03-observability/src/observability/logging.interceptor';
 
 @ApiTags('auth')
-@UseInterceptors(LoggingInterceptor)
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);

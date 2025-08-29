@@ -1,41 +1,44 @@
-import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
+import {
+  CallHandler,
+  ExecutionContext,
+  Logger,
+  NestInterceptor,
+} from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 
 export class LoggingInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(LoggingInterceptor.name);
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> {
-    console.log('Request Received');
     const httpContext = context.switchToHttp();
     const request = httpContext.getRequest();
-
     const method = request.method;
     const url = request.url;
+    const correlationId = request['X-Correlation-Id'] || 'N/A';
     const now = Date.now();
 
-    console.log(`>>> [Request] ${method} ${url} - Start`);
+    this.logger.log(
+      `Request: ${method} ${url} [Correlation-ID: ${correlationId}]`,
+    );
 
     return next.handle().pipe(
       tap({
-        next: (value) => {
+        next: () => {
           const response = httpContext.getResponse();
           const statusCode = response.statusCode;
           const duration = Date.now() - now;
-
-          // Log the successful outcome
-          console.log(
-            `<<< [Success] ${method} ${url} - ${statusCode} - ${duration}ms`,
+          this.logger.log(
+            `Response: ${method} ${url} [Status: ${statusCode}, Duration: ${duration}ms, Correlation-ID: ${correlationId}]`,
           );
         },
         error: (error) => {
           const response = httpContext.getResponse();
           const statusCode = response.statusCode;
           const duration = Date.now() - now;
-
-          // Log the failed outcome
-          console.log(
-            `<<< [Error] ${method} ${url} - ${statusCode} - ${duration}ms`,
+          this.logger.error(
+            `Error: ${method} ${url} [Status: ${statusCode}, Duration: ${duration}ms, Correlation-ID: ${correlationId}, Message: ${error.message}]`,
           );
         },
       }),
