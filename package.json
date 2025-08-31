@@ -20,6 +20,8 @@
     "start:dev:day-02": "nest start day-02-auth-module --watch",
     "start:day-03": "nest start day-03-observability",
     "start:dev:day-03": "nest start day-03-observability --watch",
+    "start:day-04": "nest start day-04-auth-guards",
+    "start:dev:day-04": "nest start day-04-auth-guards --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/nestjs-mastery-100days/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

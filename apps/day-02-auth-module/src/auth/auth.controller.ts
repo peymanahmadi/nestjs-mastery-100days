@@ -3,11 +3,13 @@ import {
   Controller,
   Logger,
   Post,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -25,12 +27,18 @@ export class AuthController {
     return this.authService.register(registerUserDto);
   }
 
-  @ApiOperation({ summary: 'Login a user' })
-  @ApiResponse({ status: 200, description: 'User logged in', type: Object })
+  @ApiOperation({ summary: 'Login a user and return a mock JWT token' })
+  @ApiResponse({
+    status: 200,
+    description: 'Token returned in body and X-Access-Token header',
+    type: Object,
+  })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto) {
+  async login(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
     this.logger.log(`Logging in user with email: ${loginUserDto.Email}`);
-    return this.authService.login(loginUserDto);
+    const result = await this.authService.login(loginUserDto);
+    res.setHeader('X-Access-Token', result.token);
+    return res.json(result);
   }
 }

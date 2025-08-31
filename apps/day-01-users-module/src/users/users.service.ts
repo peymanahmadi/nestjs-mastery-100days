@@ -8,8 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
-
-  constructor(private readonly usersRepository: UsersRepository) {}
+  private readonly instanceId = Math.random().toString(36).substring(7); // Unique ID per instance
+  constructor(private readonly usersRepository: UsersRepository) {
+    console.log(`UsersService instance created: ${this.instanceId}`);
+  }
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.findAll();
@@ -29,7 +31,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const userId = uuidv4();
-    
+
     const existingEmail = await this.usersRepository
       .findAll()
       .find((user) => user.Email === createUserDto.Email);

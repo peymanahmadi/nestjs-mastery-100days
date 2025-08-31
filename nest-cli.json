@@ -37,6 +37,15 @@
         "tsConfigPath": "apps/day-03-observability/tsconfig.app.json"
       }
     },
+    "day-04-auth-guards": {
+      "type": "application",
+      "root": "apps/day-04-auth-guards",
+      "entryFile": "main",
+      "sourceRoot": "apps/day-04-auth-guards/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/day-04-auth-guards/tsconfig.app.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",

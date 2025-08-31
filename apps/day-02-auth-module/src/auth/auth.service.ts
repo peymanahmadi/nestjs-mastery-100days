@@ -19,8 +19,8 @@ export class AuthService {
     const hashedPassword = await this.bcryptService.hash(
       registerUserDto.Password,
     );
-    const newUser: User = {
-      Id: uuidv4(),
+    const newUser = {
+      // Id: uuidv4(),
       Name: registerUserDto.Name,
       Email: registerUserDto.Email,
       Password: hashedPassword,

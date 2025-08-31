@@ -39,6 +39,7 @@ export class UsersRepository {
   create(user: User): User {
     this.users.set(user.Id, user);
     this.emailIndex.set(user.Email, user.Id);
+    console.log('user????:', user);
     return user;
   }
 
