@@ -19,14 +19,28 @@ describe('AuthGuard', () => {
     findOne: jest.fn(),
   };
 
-  const mockContext = (authHeader?: string) =>
-    ({
+  //   const mockContext = (authHeader?: string) =>
+  //     ({
+  //       switchToHttp: () => ({
+  //         getRequest: () => ({
+  //           headers: { authorization: authHeader },
+  //         }),
+  //       }),
+  //     }) as ExecutionContext;
+
+  // Create a mock request object that can be modified
+  const createMockContext = (authHeader?: string) => {
+    const mockRequest = {
+      headers: { authorization: authHeader },
+      user: undefined, // This will be set by the guard
+    };
+
+    return {
       switchToHttp: () => ({
-        getRequest: () => ({
-          headers: { authorization: authHeader },
-        }),
+        getRequest: () => mockRequest, // Return the same object each time
       }),
-    }) as ExecutionContext;
+    } as ExecutionContext;
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,25 +57,41 @@ describe('AuthGuard', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
-  
+
   it('should allow access with valid token', async () => {
     mockUsersService.findOne.mockResolvedValue(mockUser);
-    const context = mockContext('Bearer mock-jwt-123');
+
+    // Create context and get the mock request reference
+    const context = createMockContext('Bearer mock-jwt-123');
+    const mockRequest = context.switchToHttp().getRequest(); // Get reference
+
     const result = await authGuard.canActivate(context);
+
+    expect(result).toBe(true);
+    expect(mockUsersService.findOne).toHaveBeenCalledWith('123');
+    expect(mockRequest.user).toEqual(mockUser); // Use the reference, not context.getRequest() again
+  });
+
+  it('should allow access with valid token', async () => {
+    mockUsersService.findOne.mockResolvedValue(mockUser);
+    const context = createMockContext('Bearer mock-jwt-123');
+
+    const result = await authGuard.canActivate(context);
+
     expect(result).toBe(true);
     expect(mockUsersService.findOne).toHaveBeenCalledWith('123');
     expect(context.switchToHttp().getRequest().user).toEqual(mockUser);
   });
 
   it('should throw UnauthorizedException for missing token', async () => {
-    const context = mockContext();
+    const context = createMockContext();
     await expect(authGuard.canActivate(context)).rejects.toThrow(
       'Invalid or missing token',
     );
   });
 
   it('should throw UnauthorizedException for invalid token format', async () => {
-    const context = mockContext('Bearer invalid-token');
+    const context = createMockContext('Bearer invalid-token');
     await expect(authGuard.canActivate(context)).rejects.toThrow(
       'Invalid token',
     );
@@ -69,7 +99,7 @@ describe('AuthGuard', () => {
 
   it('should throw UnauthorizedException for non-existent user', async () => {
     mockUsersService.findOne.mockRejectedValue(new Error('User not found'));
-    const context = mockContext('Bearer mock-jwt-999');
+    const context = createMockContext('Bearer mock-jwt-999');
     await expect(authGuard.canActivate(context)).rejects.toThrow(
       'Invalid token',
     );
