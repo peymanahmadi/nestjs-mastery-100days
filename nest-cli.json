@@ -46,6 +46,15 @@
         "tsConfigPath": "apps/day-04-auth-guards/tsconfig.app.json"
       }
     },
+    "day-05-rbac": {
+      "type": "application",
+      "root": "apps/day-05-rbac",
+      "entryFile": "main",
+      "sourceRoot": "apps/day-05-rbac/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/day-05-rbac/tsconfig.app.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",

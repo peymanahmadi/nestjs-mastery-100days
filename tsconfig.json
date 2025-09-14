@@ -22,12 +22,27 @@
     "strictBindCallApply": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@app/shared": ["libs/shared/src"],
-      "@app/shared/*": ["libs/shared/src/*"],
-      "@day-01-users/*": ["apps/day-01-users-module/src/*"],
-      "@day-02-auth/*": ["apps/day-02-auth-module/src/*"],
-      "@day-03-observability/*": ["apps/day-03-observability/src/*"],
-      "@day-04-auth-guards/*": ["apps/day-04-auth-guards/src/*"]
+      "@app/shared": [
+        "libs/shared/src"
+      ],
+      "@app/shared/*": [
+        "libs/shared/src/*"
+      ],
+      "@day-01-users/*": [
+        "apps/day-01-users-module/src/*"
+      ],
+      "@day-02-auth/*": [
+        "apps/day-02-auth-module/src/*"
+      ],
+      "@day-03-observability/*": [
+        "apps/day-03-observability/src/*"
+      ],
+      "@day-04-auth-guards/*": [
+        "apps/day-04-auth-guards/src/*"
+      ],
+      "@day-05-rbac/*": [
+        "apps/day-05-rbac/src/*"
+      ]
     }
   }
 }
